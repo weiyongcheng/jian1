@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 10,
         justifyContent: 'center',
-        width: 200,
+        minWidth: 200,
         height: 60,
         padding: 10,
     },

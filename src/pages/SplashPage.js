@@ -8,8 +8,42 @@ export default class Splash extends Component {
     state = {isShowHongbao: false};
 
     componentDidMount() {
-        this._goPage();
+
+        // this._clear()
+        AsyncStorage.getItem(__KEYS__.IS_LOGIN).then(res => {
+            if (res === 'true' || res === true) {
+                AsyncStorage.getItem(__KEYS__.IS_AUDIT).then(res => {
+                    if (res === 'true' || res === true) {
+                        this._goPage();
+                    } else {
+                        this._goWaiting()
+                    }
+                }).catch(err => {
+                    this._goAuth();
+                })
+            } else {
+                this._goAuth();
+            }
+        }).catch(err => {
+            this._goAuth();
+        });
     }
+
+    _goAuth = () => {
+        setTimeout(() => {
+            SplashScreen && SplashScreen.hide();
+            const {navigation} = this.props;
+            navigation && navigation.replace('LoginPage');
+        }, 500);
+    };
+
+    _goWaiting = () => {
+        setTimeout(() => {
+            SplashScreen && SplashScreen.hide();
+            const {navigation} = this.props;
+            navigation && navigation.replace('WaitingPage');
+        }, 500);
+    };
 
     _goPage = () => {
         setTimeout(() => {
@@ -17,6 +51,12 @@ export default class Splash extends Component {
             const {navigation} = this.props;
             navigation && navigation.replace('App');
         }, 500);
+    };
+
+    _clear = () => {
+
+        AsyncStorage.setItem(__KEYS__.IS_LOGIN, 'false').catch(err => {})
+        AsyncStorage.setItem(__KEYS__.IS_AUDIT, 'false').catch(err => {})
     };
 
     render() {

@@ -5,6 +5,14 @@ import {
     Dimensions,
 } from 'react-native';
 
+const KEYS = {
+
+    IS_LOGIN: '',
+    IS_AUDIT: ''
+};
+
+global.__KEYS__ = KEYS;
+
 global.__SCREEN_WIDTH__ = Dimensions.get('window').width;
 global.__SCREEN_HEIGHT__ = Dimensions.get('window').height;
 global.__PIXEL__ = 1.0 / PixelRatio.get();

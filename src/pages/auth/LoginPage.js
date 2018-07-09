@@ -1,14 +1,99 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, StatusBar, ImageBackground, Image, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Text, StatusBar, ImageBackground, Image, TouchableOpacity, AsyncStorage, Keyboard} from 'react-native';
 
 import bg_img from './sources/bg.png';
 import personal_img from '../my/sources/personal.png';
-import {Input} from "teaset";
+import {Input, Theme, Toast} from "teaset";
 import rectangle from '../home/sources/rectangle.png';
+import RegexUtil from '../../utils/RegexUtil';
+import PageDecorator from '../../components/pageDecorator/PageDecorator';
 
+@PageDecorator
 export default class LoginPage extends Component{
 
-    state = {pos: 0, account: '', password: ''};
+    static xgNavigationBarOptions = {
+        hideNavBar: true,
+    };
+
+    state = {pos: 0, account: '', password: '', regisPhone: '', regisPassword: '', regisCode: ''};
+
+    _register = () => {
+
+        const telPhoneResult = RegexUtil.checkTelPhone(this.state.regisPhone);
+        if (!telPhoneResult.ok) {
+            this.xg_toastShow(telPhoneResult.errorTitle);
+            return;
+        }
+
+        const codeResult = RegexUtil.checkVerificationCode(this.state.regisCode);
+        if (!codeResult.ok) {
+            this.xg_toastShow(codeResult.errorTitle);
+            return;
+        }
+
+        const pwdResult = RegexUtil.checkPassword(this.state.regisPassword);
+        if (!pwdResult.ok) {
+            this.xg_toastShow(pwdResult.errorTitle);
+            return;
+        }
+
+        Keyboard.dismiss();
+        this.xg_loadingShow('注册中');
+        setTimeout(() => {
+            this.xg_loadingDismiss();
+            if (this.state.regisPhone === '18768477921') {
+                this.xg_toastShow('手机号已经注册');
+            } else {
+                this.xg_toastShow('验证码错误');
+            }
+        }, 1500 + Math.random() * 1000)
+    };
+
+    _Login = () => {
+        const account = this.state.account;
+        const password = this.state.password;
+
+        //check account
+        const telPhoneResult = RegexUtil.checkTelPhone(account);
+        if (!telPhoneResult.ok){
+            this.xg_toastShow(telPhoneResult.errorTitle);
+            return;
+        }
+        //check password
+        const pwdResult = RegexUtil.checkPassword(password);
+        if (!pwdResult.ok){
+            this.xg_toastShow(pwdResult.errorTitle);
+            return;
+        }
+
+        Keyboard.dismiss();
+        this.xg_loadingShow('登陆中');
+        if (account === '18768477921' && password === 'qaz123456') {
+            setTimeout(() => {
+                this.xg_loadingDismiss();
+                this.xg_toastShow('登陆成功');
+                Promise.all(AsyncStorage.setItem(__KEYS__.IS_LOGIN, 'true'), AsyncStorage.setItem(__KEYS__.IS_AUDIT, 'true')).then(() => {
+                    const {navigation} = this.props;
+                    navigation && navigation.replace('App');
+                }).catch(err => {
+                    const {navigation} = this.props;
+                    navigation && navigation.replace('App');
+                })
+            }, 1500)
+        } else if (account === '18768477921'){
+            setTimeout(() => {
+                this.xg_loadingDismiss();
+                this.xg_toastShow('账号或密码错误');
+            }, 1500)
+        } else {
+            setTimeout(() => {
+                this.xg_loadingDismiss();
+                this.xg_toastShow('账号不存在');
+            }, 1500)
+        }
+
+        // this.props.navigation.navigate('RenzhengPage');
+    };
 
     render() {
         const {pos} = this.state;
@@ -77,7 +162,8 @@ export default class LoginPage extends Component{
                     <Input
                         style={{width: 150 * __MIN_PIXEL__, backgroundColor: 'white', borderWidth: 0, marginLeft: 30}}
                         value={this.state.password}
-                        placeholder={'6-20位字母或者数字'}
+                        secureTextEntry={true}
+                        placeholder={'8-20位字母或者数字'}
                         onChangeText={text => this.setState({password: text})}
                     />
                     <View style={{flex: 1}} />
@@ -85,7 +171,7 @@ export default class LoginPage extends Component{
                 </View>
 
                 <TouchableOpacity onPress={() => {
-                    this.props.navigation.navigate('RenzhengPage');
+                    this._Login();
                 }}>
                     <ImageBackground source={rectangle} style={{width: 291 * __MIN_PIXEL__, height: 42 * __MIN_PIXEL__, alignSelf: 'center',
                         justifyContent: 'center', alignItems: 'center', marginTop: 35 * __MIN_PIXEL__}}>
@@ -107,9 +193,9 @@ export default class LoginPage extends Component{
                     <Text style={{marginLeft: 26 * __MIN_PIXEL__, fontSize: 14, color: '#666666'}}>账号</Text>
                     <Input
                         style={{width: 150 * __MIN_PIXEL__, backgroundColor: 'white', borderWidth: 0, marginLeft: 30}}
-                        value={this.state.account}
+                        value={this.state.regisPhone}
                         placeholder={'手机号'}
-                        onChangeText={text => this.setState({account: text})}
+                        onChangeText={text => this.setState({regisPhone: text})}
                     />
                 </View>
 
@@ -120,9 +206,10 @@ export default class LoginPage extends Component{
                     <Text style={{marginLeft: 26 * __MIN_PIXEL__, fontSize: 14, color: '#666666'}}>验证</Text>
                     <Input
                         style={{width: 100 * __MIN_PIXEL__, backgroundColor: 'white', borderWidth: 0, marginLeft: 30}}
-                        value={this.state.account}
+                        value={this.state.regisCode}
+                        secureTextEntry={true}
                         placeholder={'验证码'}
-                        onChangeText={text => this.setState({account: text})}
+                        onChangeText={text => this.setState({regisCode: text})}
                     />
                     <View style={{flex: 1}} />
                     <View style={{minWidth: 86 * __MIN_PIXEL__, height: 32 * __MIN_PIXEL__, borderRadius: 5, backgroundColor: '#FF8352',
@@ -138,17 +225,22 @@ export default class LoginPage extends Component{
                     <Text style={{marginLeft: 26 * __MIN_PIXEL__, fontSize: 14, color: '#666666'}}>密码</Text>
                     <Input
                         style={{width: 150 * __MIN_PIXEL__, backgroundColor: 'white', borderWidth: 0, marginLeft: 30}}
-                        value={this.state.password}
-                        placeholder={'6-20位字母或者数字'}
-                        onChangeText={text => this.setState({password: text})}
+                        value={this.state.regisPassword}
+                        placeholder={'8-20位字母或者数字'}
+                        onChangeText={text => this.setState({regisPassword: text})}
                     />
                 </View>
-                <ImageBackground source={rectangle} style={{width: 291 * __MIN_PIXEL__, height: 42 * __MIN_PIXEL__, alignSelf: 'center',
-                    justifyContent: 'center', alignItems: 'center', marginTop: 35 * __MIN_PIXEL__}}>
 
-                    <Text style={{fontSize: 18, color: 'white'}}>注  册</Text>
+                <TouchableOpacity onPress={() => {
+                    this._register();
+                }}>
+                    <ImageBackground source={rectangle} style={{width: 291 * __MIN_PIXEL__, height: 42 * __MIN_PIXEL__, alignSelf: 'center',
+                        justifyContent: 'center', alignItems: 'center', marginTop: 35 * __MIN_PIXEL__}}>
 
-                </ImageBackground>
+                        <Text style={{fontSize: 18, color: 'white'}}>注  册</Text>
+
+                    </ImageBackground>
+                </TouchableOpacity>
             </View>
         );
     };

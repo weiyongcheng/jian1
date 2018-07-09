@@ -54,24 +54,25 @@ export default class JianzhiRowCell extends Component{
 
     _renderContent = () => {
 
+        const {posDesc = '', contentDesc = '', timeDesc = ''} = this.props;
+
         return (
             <View style={{width: __SCREEN_WIDTH__, flex: 1, paddingLeft: 60 * __MIN_PIXEL__, paddingRight: 24 * __MIN_PIXEL__}}>
                 <View style={{justifyContent: 'space-around', flex: 1}}>
                     <View style={{flexDirection: 'row', marginTop: 12 * __MIN_PIXEL__, alignItems: 'center'}}>
                         <Image source={dingwei_img} style={{width: 7, height: 9}} resizeMode={'stretch'} />
-                        <Text style={{fontSize: 10, color: '#999999', marginLeft: 7}}>上城区/3.2km</Text>
+                        <Text style={{fontSize: 10, color: '#999999', marginLeft: 7}}>{posDesc}</Text>
                     </View>
 
                     <View style={{marginTop: 2}}>
-                        <Text style={{fontSize: 12, color: '#666666'}} numberOfLines={2}>dsfsddsfsdf</Text>
+                        <Text style={{fontSize: 12, color: '#666666'}} numberOfLines={2}>{contentDesc}</Text>
                     </View>
 
                     <View style={{flexDirection: 'row', marginTop: 2 * __MIN_PIXEL__, alignItems: 'center'}}>
                         <Image source={shijian_img} style={{width: __MIN_PIXEL__ * 11, height: __MIN_PIXEL__ * 11}} />
-                        <Text style={{fontSize: 10, color: '#999999', marginLeft: 5}}>时间：2018-07-15～2018-08-15</Text>
+                        <Text style={{fontSize: 10, color: '#999999', marginLeft: 5}}>时间：{timeDesc}</Text>
                     </View>
                 </View>
-
 
                 <ImageBackground source={rectangle_img} style={{width: 291 * __MIN_PIXEL__, height: 42 * __MIN_PIXEL__,
                     marginBottom: 14 * __MIN_PIXEL__, justifyContent: 'center', alignItems: 'center', marginTop: 13 * __MIN_PIXEL__ }} resizeMode={'stretch'}>
