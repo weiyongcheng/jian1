@@ -37,12 +37,22 @@ export default class KuaijiePage extends Component {
 
                         <Image source={kuaijie_img} style={{width: __SCREEN_WIDTH__, height: 120 * __MIN_PIXEL__}} resizeMode={'stretch'} />
 
-                    <JianzhiRowCell title={'代取快递'} moneyDesc={'25元'} type={0}/>
-                    <JianzhiRowCell title={'代取快递'} moneyDesc={'25元'} type={1}/>
-                    <JianzhiRowCell title={'代取快递'} moneyDesc={'25元'} type={2}/>
-                    <JianzhiRowCell title={'代取快递'} moneyDesc={'25元'} type={0}/>
-                    <JianzhiRowCell title={'代取快递'} moneyDesc={'25元'} type={1}/>
-                    <JianzhiRowCell title={'代取快递'} moneyDesc={'25元'} type={2}/>
+                        <JianzhiRowCell title={'招聘暑假兼职工（面包店）'} moneyDesc={'70/天'} type={2} timeDesc={'2018-08-10～2018-9-10'}
+                                        posDesc={'萧山区'} contentDesc={'浙江省杭州市萧山区萧山经济开发区市心北路126号大成名座 85℃面包店'}
+                                        callback={() => {
+                                            this.props.navigation.navigate('DetailPage', {
+                                                title: '招聘暑假兼职工（面包店）',
+                                                moneyDesc: '70/天',
+                                                type: '2',
+                                                timeDesc: '2018-08-10～2018-9-10',
+                                                posDesc: '萧山区',
+                                                contentDesc: '浙江省杭州市萧山区萧山经济开发区市心北路126号大成名座 85℃面包店',
+                                                name: '王小姐',
+                                                phone: '13736195436',
+                                                orderTime: '2018-07-11 09:06:03',
+                                                orderNo: '12000201806308528'
+                                            })
+                                        }}/>
 
                     </ScrollView>
 

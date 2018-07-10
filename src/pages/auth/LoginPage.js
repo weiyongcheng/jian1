@@ -7,6 +7,7 @@ import {Input, Theme, Toast} from "teaset";
 import rectangle from '../home/sources/rectangle.png';
 import RegexUtil from '../../utils/RegexUtil';
 import PageDecorator from '../../components/pageDecorator/PageDecorator';
+import LCCountDownButton from 'react-native-countdownbutton'
 
 @PageDecorator
 export default class LoginPage extends Component{
@@ -212,10 +213,21 @@ export default class LoginPage extends Component{
                         onChangeText={text => this.setState({regisCode: text})}
                     />
                     <View style={{flex: 1}} />
-                    <View style={{minWidth: 86 * __MIN_PIXEL__, height: 32 * __MIN_PIXEL__, borderRadius: 5, backgroundColor: '#FF8352',
-                        justifyContent: 'center', alignItems: 'center', marginRight: 7 * __MIN_PIXEL__}}>
-                        <Text style={{fontSize: 14, color: '#ffffff'}}>获取验证码</Text>
-                    </View>
+                    <LCCountDownButton frameStyle={styles.countDown}
+                                       activeTextStyle={{fontSize: 14, color: '#ffffff'}}
+                                       beginText='获取验证码'
+                                       endText='再次获取验证码'
+                                       count={60}
+                                       pressAction={()=>{this.countDownButton.startCountDown()}}
+                                       changeWithCount={(count)=> count + 's后重新获取'}
+                                       id='register'
+                                       ref={(e)=>{this.countDownButton=e}}
+                    />
+
+                    {/*<View style={{minWidth: 86 * __MIN_PIXEL__, height: 32 * __MIN_PIXEL__, borderRadius: 5, backgroundColor: '#FF8352',*/}
+                        {/*justifyContent: 'center', alignItems: 'center', marginRight: 7 * __MIN_PIXEL__}}>*/}
+                        {/*<Text style={{fontSize: 14, color: '#ffffff'}}>获取验证码</Text>*/}
+                    {/*</View>*/}
                 </View>
 
                 <View style={{width: 336 * __MIN_PIXEL__, height: __PIXEL__, backgroundColor: '#E7E7E7', alignSelf: 'center'}} />
@@ -250,5 +262,13 @@ const styles = StyleSheet.create({
     container: {
         width: __SCREEN_WIDTH__,
         height: __SCREEN_HEIGHT__
+    },
+    countDown: {
+        minWidth: 86 * __MIN_PIXEL__,
+        height: 32 * __MIN_PIXEL__,
+        borderRadius: 5,
+        backgroundColor: '#FF8352',
+        marginRight: 7 * __MIN_PIXEL__,
+        borderWidth: 0
     }
 });

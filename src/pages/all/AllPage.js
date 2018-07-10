@@ -92,7 +92,6 @@ export default class AllPage extends Component {
 
                 </View>
             </ScrollView>
-
         );
     }
 }
