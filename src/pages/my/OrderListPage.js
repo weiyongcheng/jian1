@@ -14,6 +14,8 @@ import return_img from '../home/sources/return.png';
 export default class OrderListPage extends Component {
 
     render() {
+        const { navigation } = this.props;
+        const index = navigation.getParam('index', 0);
         return (
             <View style={styles.container}>
                 <View style={{width: __SCREEN_WIDTH__, height: 65, backgroundColor: 'white'}}>
@@ -32,7 +34,7 @@ export default class OrderListPage extends Component {
 
                 <ScrollableTabView
                     style={{width: __SCREEN_WIDTH__, height: __SCREEN_HEIGHT__ - 65}}
-                    initialPage={0}
+                    initialPage={index}
                     renderTabBar={() => <ScrollableTabBar
                         style={{borderWidth: 0}}
                         backgroundColor={'white'}

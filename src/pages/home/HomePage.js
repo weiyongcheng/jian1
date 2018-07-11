@@ -16,8 +16,13 @@ import gengduo_img from './sources/gengduo.png';
 import middle_banner from './sources/middle_banner.png';
 import JianzhiRowCell from "./components/JianzhiRowCell";
 import down_img from './sources/down.png';
+import ApiProvider from "../../logics/ApiProvider";
 
 export default class HomePage extends Component {
+
+    componentDidMount() {
+        ApiProvider.randomRequest();
+    }
 
     _onTypePress = (pos) => {
         switch (pos) {

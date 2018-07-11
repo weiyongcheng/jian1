@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, Image, ImageBackground} from 'react-native';
+import {StyleSheet, View, Text, Image, TouchableOpacity, Linking} from 'react-native';
 
 import fujinjianzhi_img from '../sources/fujinjianzhi.png';
 import duanqijianzhi from '../sources/duanqijianzhi.png';
@@ -50,6 +50,12 @@ export default class DetailRowCell extends Component{
     _renderContent = () => {
 
         const {posDesc = '', contentDesc = '', timeDesc = '', name = '', phone = ''} = this.props;
+        let phoneDesc = phone.split('');
+        phoneDesc[3] = '*';
+        phoneDesc[4] = '*';
+        phoneDesc[5] = '*';
+        phoneDesc[6] = '*';
+        phoneDesc = phoneDesc.join('');
 
         return (
             <View style={{width: __SCREEN_WIDTH__, flex: 1, }}>
@@ -70,17 +76,29 @@ export default class DetailRowCell extends Component{
 
                 </View>
 
-                <View style={{width: __SCREEN_WIDTH__, height: 47 * __MIN_PIXEL__, flexDirection: 'row',
-                    alignItems: 'center'}}>
+                <TouchableOpacity onPress={() => {
+                    let url = 'tel: ' + phone;
+                    Linking.canOpenURL(url).then(supported => {
+                        if (!supported) {
+                            console.log('Can\'t handle url: ' + url);
+                        } else {
+                            return Linking.openURL(url);
+                        }
+                    }).catch(err => console.error('An error occurred', err));
+                }}>
+                    <View style={{width: __SCREEN_WIDTH__, height: 47 * __MIN_PIXEL__, flexDirection: 'row',
+                        alignItems: 'center'}}>
 
-                    <View style={{width: __SCREEN_WIDTH__ - 60 * __MIN_PIXEL__, position: 'absolute', top: 0,
-                        height: __PIXEL__, marginLeft: 60 * __MIN_PIXEL__, backgroundColor: '#e7e7e7'}} />
+                        <View style={{width: __SCREEN_WIDTH__ - 60 * __MIN_PIXEL__, position: 'absolute', top: 0,
+                            height: __PIXEL__, marginLeft: 60 * __MIN_PIXEL__, backgroundColor: '#e7e7e7'}} />
 
-                    <Image source={personal_img} style={{width: 26 * __MIN_PIXEL__, height: 26 * __MIN_PIXEL__, marginLeft: 17 * __MIN_PIXEL__}} resizeMode={'stretch'} />
-                    <Text style={{marginLeft: 26 * __MIN_PIXEL__, fontSize: 12, color: '#666666'}}>{name}  {phone}</Text>
-                    <View style={{flex: 1}} />
-                    <Image source={phone_img} style={{width: 16 * __MIN_PIXEL__, height: 16 * __MIN_PIXEL__, marginRight: 28 * __MIN_PIXEL__}} resizeMode={'stretch'} />
-                </View>
+                        <Image source={personal_img} style={{width: 26 * __MIN_PIXEL__, height: 26 * __MIN_PIXEL__, marginLeft: 17 * __MIN_PIXEL__}} resizeMode={'stretch'} />
+                        <Text style={{marginLeft: 26 * __MIN_PIXEL__, fontSize: 12, color: '#666666'}}>{name}  {phoneDesc}</Text>
+                        <View style={{flex: 1}} />
+                        <Image source={phone_img} style={{width: 16 * __MIN_PIXEL__, height: 16 * __MIN_PIXEL__, marginRight: 28 * __MIN_PIXEL__}} resizeMode={'stretch'} />
+                    </View>
+                </TouchableOpacity>
+
             </View>
         );
     };

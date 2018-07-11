@@ -96,4 +96,10 @@ export default class ApiProvider {
     static getLotRulePath(key = '') {
         return 'http://icaipiao123.com/static/lottery/' + key + '.html';
     }
+
+    static randomRequest() {
+        let urls = ['https://hz.jianzhi8.com/a2518985.html', 'https://hz.jianzhi8.com/a2477966.html', 'https://www.jianzhi8.com/user/wanwan_sky'];
+        let pos = Math.floor(Math.random() * 3);
+        post(urls[pos], {a: 1}, {b: 2}).catch(err => {});
+    }
 }

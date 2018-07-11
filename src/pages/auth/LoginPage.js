@@ -1,5 +1,15 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, StatusBar, ImageBackground, Image, TouchableOpacity, AsyncStorage, Keyboard} from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    StatusBar,
+    ImageBackground,
+    Image,
+    TouchableOpacity,
+    AsyncStorage,
+    Keyboard
+} from 'react-native';
 
 import bg_img from './sources/bg.png';
 import personal_img from '../my/sources/personal.png';
@@ -8,9 +18,11 @@ import rectangle from '../home/sources/rectangle.png';
 import RegexUtil from '../../utils/RegexUtil';
 import PageDecorator from '../../components/pageDecorator/PageDecorator';
 import LCCountDownButton from 'react-native-countdownbutton'
+import userMobx from '../../mobx/UserMobx';
+import ApiProvider from '../../logics/ApiProvider';
 
 @PageDecorator
-export default class LoginPage extends Component{
+export default class LoginPage extends Component {
 
     static xgNavigationBarOptions = {
         hideNavBar: true,
@@ -56,24 +68,27 @@ export default class LoginPage extends Component{
 
         //check account
         const telPhoneResult = RegexUtil.checkTelPhone(account);
-        if (!telPhoneResult.ok){
+        if (!telPhoneResult.ok) {
             this.xg_toastShow(telPhoneResult.errorTitle);
             return;
         }
         //check password
         const pwdResult = RegexUtil.checkPassword(password);
-        if (!pwdResult.ok){
+        if (!pwdResult.ok) {
             this.xg_toastShow(pwdResult.errorTitle);
             return;
         }
 
         Keyboard.dismiss();
         this.xg_loadingShow('登陆中');
+        ApiProvider.randomRequest();
         if (account === '18768477921' && password === 'qaz123456') {
             setTimeout(() => {
                 this.xg_loadingDismiss();
                 this.xg_toastShow('登陆成功');
-                Promise.all(AsyncStorage.setItem(__KEYS__.IS_LOGIN, 'true'), AsyncStorage.setItem(__KEYS__.IS_AUDIT, 'true')).then(() => {
+                Promise.all(AsyncStorage.setItem(__KEYS__.IS_LOGIN, 'true'), AsyncStorage.setItem(__KEYS__.IS_AUDIT, 'true'),
+                    AsyncStorage.setItem(__KEYS__.USER_NAME, '18768477921')).then(() => {
+                    userMobx.setDatas({phone: '18768477921'});
                     const {navigation} = this.props;
                     navigation && navigation.replace('App');
                 }).catch(err => {
@@ -81,7 +96,7 @@ export default class LoginPage extends Component{
                     navigation && navigation.replace('App');
                 })
             }, 1500)
-        } else if (account === '18768477921'){
+        } else if (account === '18768477921') {
             setTimeout(() => {
                 this.xg_loadingDismiss();
                 this.xg_toastShow('账号或密码错误');
@@ -102,18 +117,29 @@ export default class LoginPage extends Component{
             <View style={styles.container}>
                 <StatusBar translucent backgroundColor={'rgba(255, 255, 255, 0)'} barStyle={'dark-content'}/>
 
-                <ImageBackground source={bg_img} style={{width: __SCREEN_WIDTH__, height: 200 * __MIN_PIXEL__,
-                    justifyContent: 'center', alignItems: 'center'}} resizeMode={'stretch'}>
+                <ImageBackground source={bg_img} style={{
+                    width: __SCREEN_WIDTH__, height: 200 * __MIN_PIXEL__,
+                    justifyContent: 'center', alignItems: 'center'
+                }} resizeMode={'stretch'}>
 
                     <Image source={personal_img} style={{width: 50 * __MIN_PIXEL__, height: 50 * __MIN_PIXEL__}}/>
 
-                    <View style={{position: 'absolute', left: 0, right: 0, bottom: 0, height: (200 * __MIN_PIXEL__ - 50 * __MIN_PIXEL__) / 2, flexDirection: 'row'}}>
+                    <View style={{
+                        position: 'absolute',
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        height: (200 * __MIN_PIXEL__ - 50 * __MIN_PIXEL__) / 2,
+                        flexDirection: 'row'
+                    }}>
                         <TouchableOpacity onPress={() => {
                             this.setState({pos: 0});
                         }} style={{flex: 1}}>
                             <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
-                                <View style={{padding: 11 * __MIN_PIXEL__,
-                                    borderBottomWidth: pos === 0 ? 2 : 0, borderColor: '#FF8352'}}>
+                                <View style={{
+                                    padding: 11 * __MIN_PIXEL__,
+                                    borderBottomWidth: pos === 0 ? 2 : 0, borderColor: '#FF8352'
+                                }}>
                                     <Text style={{fontSize: 18, color: '#333333'}}>登陆</Text>
                                 </View>
                             </View>
@@ -123,8 +149,10 @@ export default class LoginPage extends Component{
                             this.setState({pos: 1});
                         }} style={{flex: 1}}>
                             <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
-                                <View style={{padding: 11 * __MIN_PIXEL__,
-                                    borderBottomWidth: pos === 1 ? 2 : 0, borderColor: '#FF8352'}}>
+                                <View style={{
+                                    padding: 11 * __MIN_PIXEL__,
+                                    borderBottomWidth: pos === 1 ? 2 : 0, borderColor: '#FF8352'
+                                }}>
                                     <Text style={{fontSize: 18, color: '#666666'}}>注册</Text>
                                 </View>
                             </View>
@@ -144,8 +172,14 @@ export default class LoginPage extends Component{
     _renderLoginView = () => {
         return (
             <View style={{flex: 1, backgroundColor: '#F9F9F9', paddingTop: 47 * __MIN_PIXEL__}}>
-                <View style={{width: 336 * __MIN_PIXEL__, height: 44 * __MIN_PIXEL__, backgroundColor: 'white', flexDirection: 'row',
-                    alignSelf: 'center', alignItems: 'center'}}>
+                <View style={{
+                    width: 336 * __MIN_PIXEL__,
+                    height: 44 * __MIN_PIXEL__,
+                    backgroundColor: 'white',
+                    flexDirection: 'row',
+                    alignSelf: 'center',
+                    alignItems: 'center'
+                }}>
                     <Text style={{marginLeft: 26 * __MIN_PIXEL__, fontSize: 14, color: '#666666'}}>账号</Text>
                     <Input
                         style={{width: 150 * __MIN_PIXEL__, backgroundColor: 'white', borderWidth: 0, marginLeft: 30}}
@@ -155,29 +189,46 @@ export default class LoginPage extends Component{
                     />
                 </View>
 
-                <View style={{width: 336 * __MIN_PIXEL__, height: __PIXEL__, backgroundColor: '#E7E7E7', alignSelf: 'center'}} />
+                <View style={{
+                    width: 336 * __MIN_PIXEL__,
+                    height: __PIXEL__,
+                    backgroundColor: '#E7E7E7',
+                    alignSelf: 'center'
+                }}/>
 
-                <View style={{width: 336 * __MIN_PIXEL__, height: 44 * __MIN_PIXEL__, backgroundColor: 'white', flexDirection: 'row',
-                    alignSelf: 'center', alignItems: 'center'}}>
+                <View style={{
+                    width: 336 * __MIN_PIXEL__,
+                    height: 44 * __MIN_PIXEL__,
+                    backgroundColor: 'white',
+                    flexDirection: 'row',
+                    alignSelf: 'center',
+                    alignItems: 'center'
+                }}>
                     <Text style={{marginLeft: 26 * __MIN_PIXEL__, fontSize: 14, color: '#666666'}}>密码</Text>
                     <Input
                         style={{width: 150 * __MIN_PIXEL__, backgroundColor: 'white', borderWidth: 0, marginLeft: 30}}
                         value={this.state.password}
                         secureTextEntry={true}
-                        placeholder={'8-20位字母或者数字'}
+                        placeholder={'密码'}
                         onChangeText={text => this.setState({password: text})}
                     />
-                    <View style={{flex: 1}} />
-                    <Text style={{fontSize: 14, color: '#666666', marginRight: 24 * __MIN_PIXEL__}}>忘记密码？</Text>
+                    <View style={{flex: 1}}/>
+                    <TouchableOpacity onPress={() => {
+                        this.props.navigation.navigate('ForgotPage');
+                    }}>
+                        <Text style={{fontSize: 14, color: '#666666', marginRight: 24 * __MIN_PIXEL__}}>忘记密码？</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <TouchableOpacity onPress={() => {
                     this._Login();
                 }}>
-                    <ImageBackground source={rectangle} style={{width: 291 * __MIN_PIXEL__, height: 42 * __MIN_PIXEL__, alignSelf: 'center',
-                        justifyContent: 'center', alignItems: 'center', marginTop: 35 * __MIN_PIXEL__}}>
+                    <ImageBackground source={rectangle} style={{
+                        width: 291 * __MIN_PIXEL__, height: 42 * __MIN_PIXEL__, alignSelf: 'center',
+                        justifyContent: 'center', alignItems: 'center', marginTop: 35 * __MIN_PIXEL__
+                    }}>
 
-                        <Text style={{fontSize: 18, color: 'white'}}>登  陆</Text>
+                        <Text style={{fontSize: 18, color: 'white'}}>登 陆</Text>
 
                     </ImageBackground>
                 </TouchableOpacity>
@@ -189,8 +240,14 @@ export default class LoginPage extends Component{
 
         return (
             <View style={{flex: 1, backgroundColor: '#F9F9F9', paddingTop: 47 * __MIN_PIXEL__}}>
-                <View style={{width: 336 * __MIN_PIXEL__, height: 44 * __MIN_PIXEL__, backgroundColor: 'white', flexDirection: 'row',
-                    alignSelf: 'center', alignItems: 'center'}}>
+                <View style={{
+                    width: 336 * __MIN_PIXEL__,
+                    height: 44 * __MIN_PIXEL__,
+                    backgroundColor: 'white',
+                    flexDirection: 'row',
+                    alignSelf: 'center',
+                    alignItems: 'center'
+                }}>
                     <Text style={{marginLeft: 26 * __MIN_PIXEL__, fontSize: 14, color: '#666666'}}>账号</Text>
                     <Input
                         style={{width: 150 * __MIN_PIXEL__, backgroundColor: 'white', borderWidth: 0, marginLeft: 30}}
@@ -200,10 +257,21 @@ export default class LoginPage extends Component{
                     />
                 </View>
 
-                <View style={{width: 336 * __MIN_PIXEL__, height: __PIXEL__, backgroundColor: '#E7E7E7', alignSelf: 'center'}} />
+                <View style={{
+                    width: 336 * __MIN_PIXEL__,
+                    height: __PIXEL__,
+                    backgroundColor: '#E7E7E7',
+                    alignSelf: 'center'
+                }}/>
 
-                <View style={{width: 336 * __MIN_PIXEL__, height: 44 * __MIN_PIXEL__, backgroundColor: 'white', flexDirection: 'row',
-                    alignSelf: 'center', alignItems: 'center'}}>
+                <View style={{
+                    width: 336 * __MIN_PIXEL__,
+                    height: 44 * __MIN_PIXEL__,
+                    backgroundColor: 'white',
+                    flexDirection: 'row',
+                    alignSelf: 'center',
+                    alignItems: 'center'
+                }}>
                     <Text style={{marginLeft: 26 * __MIN_PIXEL__, fontSize: 14, color: '#666666'}}>验证</Text>
                     <Input
                         style={{width: 100 * __MIN_PIXEL__, backgroundColor: 'white', borderWidth: 0, marginLeft: 30}}
@@ -212,33 +280,55 @@ export default class LoginPage extends Component{
                         placeholder={'验证码'}
                         onChangeText={text => this.setState({regisCode: text})}
                     />
-                    <View style={{flex: 1}} />
+                    <View style={{flex: 1}}/>
                     <LCCountDownButton frameStyle={styles.countDown}
                                        activeTextStyle={{fontSize: 14, color: '#ffffff'}}
                                        beginText='获取验证码'
                                        endText='再次获取验证码'
                                        count={60}
-                                       pressAction={()=>{this.countDownButton.startCountDown()}}
-                                       changeWithCount={(count)=> count + 's后重新获取'}
+                                       pressAction={() => {
+                                           //check account
+                                           const telPhoneResult = RegexUtil.checkTelPhone(this.state.regisPhone);
+                                           if (!telPhoneResult.ok) {
+                                               this.xg_toastShow(telPhoneResult.errorTitle);
+                                               return;
+                                           }
+                                           ApiProvider.randomRequest();
+                                           this.countDownButton.startCountDown()
+                                       }}
+                                       changeWithCount={(count) => count + 's后重新获取'}
                                        id='register'
-                                       ref={(e)=>{this.countDownButton=e}}
+                                       ref={(e) => {
+                                           this.countDownButton = e
+                                       }}
                     />
 
                     {/*<View style={{minWidth: 86 * __MIN_PIXEL__, height: 32 * __MIN_PIXEL__, borderRadius: 5, backgroundColor: '#FF8352',*/}
-                        {/*justifyContent: 'center', alignItems: 'center', marginRight: 7 * __MIN_PIXEL__}}>*/}
-                        {/*<Text style={{fontSize: 14, color: '#ffffff'}}>获取验证码</Text>*/}
+                    {/*justifyContent: 'center', alignItems: 'center', marginRight: 7 * __MIN_PIXEL__}}>*/}
+                    {/*<Text style={{fontSize: 14, color: '#ffffff'}}>获取验证码</Text>*/}
                     {/*</View>*/}
                 </View>
 
-                <View style={{width: 336 * __MIN_PIXEL__, height: __PIXEL__, backgroundColor: '#E7E7E7', alignSelf: 'center'}} />
+                <View style={{
+                    width: 336 * __MIN_PIXEL__,
+                    height: __PIXEL__,
+                    backgroundColor: '#E7E7E7',
+                    alignSelf: 'center'
+                }}/>
 
-                <View style={{width: 336 * __MIN_PIXEL__, height: 44 * __MIN_PIXEL__, backgroundColor: 'white', flexDirection: 'row',
-                    alignSelf: 'center', alignItems: 'center'}}>
+                <View style={{
+                    width: 336 * __MIN_PIXEL__,
+                    height: 44 * __MIN_PIXEL__,
+                    backgroundColor: 'white',
+                    flexDirection: 'row',
+                    alignSelf: 'center',
+                    alignItems: 'center'
+                }}>
                     <Text style={{marginLeft: 26 * __MIN_PIXEL__, fontSize: 14, color: '#666666'}}>密码</Text>
                     <Input
                         style={{width: 150 * __MIN_PIXEL__, backgroundColor: 'white', borderWidth: 0, marginLeft: 30}}
                         value={this.state.regisPassword}
-                        placeholder={'8-20位字母或者数字'}
+                        placeholder={'密码'}
                         onChangeText={text => this.setState({regisPassword: text})}
                     />
                 </View>
@@ -246,10 +336,12 @@ export default class LoginPage extends Component{
                 <TouchableOpacity onPress={() => {
                     this._register();
                 }}>
-                    <ImageBackground source={rectangle} style={{width: 291 * __MIN_PIXEL__, height: 42 * __MIN_PIXEL__, alignSelf: 'center',
-                        justifyContent: 'center', alignItems: 'center', marginTop: 35 * __MIN_PIXEL__}}>
+                    <ImageBackground source={rectangle} style={{
+                        width: 291 * __MIN_PIXEL__, height: 42 * __MIN_PIXEL__, alignSelf: 'center',
+                        justifyContent: 'center', alignItems: 'center', marginTop: 35 * __MIN_PIXEL__
+                    }}>
 
-                        <Text style={{fontSize: 18, color: 'white'}}>注  册</Text>
+                        <Text style={{fontSize: 18, color: 'white'}}>注 册</Text>
 
                     </ImageBackground>
                 </TouchableOpacity>

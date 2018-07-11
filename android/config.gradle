@@ -1,6 +1,6 @@
 ext {
     app = [
-            "applicationId"       : "com.fc.wawq.opew.aje",
+            "applicationId"       : "com.ttz.jsz.xg",
             "VERSION_CODE"        : 1,
             "CODE_PUSH_SERVER_URL": "",
             "CODE_PUSH_KEY"       : "",

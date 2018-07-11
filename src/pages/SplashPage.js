@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Image, View, AsyncStorage, NativeModules, Dimensions} from 'react-native';
 
 const {SplashScreen, OrientationNotice} = NativeModules;
+import userMobx from '../mobx/UserMobx';
 
 export default class Splash extends Component {
 
@@ -14,6 +15,9 @@ export default class Splash extends Component {
             if (res === 'true' || res === true) {
                 AsyncStorage.getItem(__KEYS__.IS_AUDIT).then(res => {
                     if (res === 'true' || res === true) {
+                        AsyncStorage.getItem(__KEYS__.USER_NAME).then(res => {
+                            userMobx.setDatas({phone: res});
+                        }).catch(err => {});
                         this._goPage();
                     } else {
                         this._goWaiting()

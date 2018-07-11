@@ -13,7 +13,7 @@ import clear_img from './sources/clear.png';
 
 export default class ClearPage extends Component {
 
-    state = {value: '233M'};
+    state = {value: '16M'};
 
     render() {
         return (

@@ -15,6 +15,7 @@ import OrderListPage from './pages/my/OrderListPage';
 import LoginPage from './pages/auth/LoginPage';
 import RenzhengPage from './pages/auth/RenzhengPage';
 import WaitingPage from './pages/auth/WaitingPage';
+import ForgotPage from './pages/auth/ForgotPassword';
 
 export default AppRoute = StackNavigator({
     SplashPage: SplashPage,
@@ -31,7 +32,8 @@ export default AppRoute = StackNavigator({
     OrderListPage: OrderListPage,
     LoginPage: LoginPage,
     RenzhengPage: RenzhengPage,
-    WaitingPage: WaitingPage
+    WaitingPage: WaitingPage,
+    ForgotPage: ForgotPage
 }, {
     headerMode: 'none',
 });

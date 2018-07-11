@@ -7,8 +7,9 @@ import {
 
 const KEYS = {
 
-    IS_LOGIN: '',
-    IS_AUDIT: ''
+    IS_LOGIN: '__IS_LOGIN',
+    IS_AUDIT: '__IS_AUDIT',
+    USER_NAME: '__USER__NAME__'
 };
 
 global.__KEYS__ = KEYS;

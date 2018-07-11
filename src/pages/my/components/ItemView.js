@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
 import ListRowCell from "../../home/components/ListRowCell";
+import EmptyView from "../../../components/EmptyView";
 
 export default class ItemView extends Component {
 
@@ -13,23 +14,9 @@ export default class ItemView extends Component {
         return(
             <View style={styles.container}>
                 <View style={{width: __SCREEN_WIDTH__, height: 17 * __MIN_PIXEL__}} />
-                <ScrollView>
-                    <ListRowCell title={'代取快递'} moneyDesc={'25元'} type={0} statusType={this.props.statusType}/>
-                    <ListRowCell title={'代取快递'} moneyDesc={'25元'} type={0} statusType={this.props.statusType}/>
-                    <ListRowCell title={'代取快递'} moneyDesc={'25元'} type={0} statusType={this.props.statusType}/>
-                    <ListRowCell title={'代取快递'} moneyDesc={'25元'} type={0} statusType={this.props.statusType}/>
-                    <ListRowCell title={'代取快递'} moneyDesc={'25元'} type={0} statusType={this.props.statusType}/>
-                    <ListRowCell title={'代取快递'} moneyDesc={'25元'} type={0} statusType={this.props.statusType}/>
-                    <ListRowCell title={'代取快递'} moneyDesc={'25元'} type={0} statusType={this.props.statusType}/>
-                    <ListRowCell title={'代取快递'} moneyDesc={'25元'} type={0} statusType={this.props.statusType}/>
-                    <ListRowCell title={'代取快递'} moneyDesc={'25元'} type={0} statusType={this.props.statusType}/>
-                    <ListRowCell title={'代取快递'} moneyDesc={'25元'} type={0} statusType={this.props.statusType}/>
-                    <ListRowCell title={'代取快递'} moneyDesc={'25元'} type={0} statusType={this.props.statusType}/>
-                    <ListRowCell title={'代取快递'} moneyDesc={'25元'} type={0} statusType={this.props.statusType}/>
-                    <ListRowCell title={'代取快递'} moneyDesc={'25元'} type={0} statusType={this.props.statusType}/>
-                    <ListRowCell title={'代取快递'} moneyDesc={'25元'} type={0} statusType={this.props.statusType}/>
-                    <ListRowCell title={'代取快递'} moneyDesc={'25元'} type={0} statusType={this.props.statusType}/>
-                </ScrollView>
+                <View style={{flex: 1, alignItems: 'center', paddingTop: 110 * __MIN_PIXEL__}}>
+                    <EmptyView/>
+                </View>
             </View>
         );
     }
